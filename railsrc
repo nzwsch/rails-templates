@@ -1,0 +1,8 @@
+--skip-action-mailbox
+--skip-action-mailer
+--skip-action-text
+--skip-active-storage
+--skip-dev-gems
+--skip-jbuilder
+--skip-system-test
+--skip-test
