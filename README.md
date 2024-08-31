@@ -1,6 +1,10 @@
 # Rails Templates
 
+## Usage
+
 ```
-Usage:
-  rails new APP_PATH -m https://raw.githubusercontent.com/nzwsch/rails-templates/master/template.rb
+$ curl -fsSL https://raw.githubusercontent.com/nzwsch/rails-templates/master/railsrc -o ~/.railsrc
+```
+```
+$ rails new APP_PATH
 ```

@@ -6,3 +6,5 @@
 --skip-jbuilder
 --skip-system-test
 --skip-test
+
+--template https://raw.githubusercontent.com/nzwsch/rails-templates/master/template.rb
