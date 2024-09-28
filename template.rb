@@ -1,4 +1,4 @@
-# template.rb
+# Description: This script is for Rails 7.2.0.
 
 # 1. Add .editorconfig file
 file ".editorconfig", <<~CODE
@@ -17,6 +17,11 @@ CODE
 gem_group :development do
   gem "rubocop-rails-omakase", require: false
   gem "rubocop-rspec", require: false
+end
+
+# Remove .rubocop.yml file if it exists
+if File.exist?(".rubocop.yml")
+  run "rm .rubocop.yml"
 end
 
 # 3. Add .rubocop.yml file
