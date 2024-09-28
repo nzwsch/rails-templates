@@ -1,4 +1,11 @@
-# Description: This script is for Rails 7.2.0.
+# Usage: rails new app_name -m template.rb
+
+# def rails_version
+#   @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
+# end
+# def rspec_version
+#   @rspec_version ||= Gem::Version.new(RSpec::Rails::Version::STRING)
+# end
 
 # 1. Add .editorconfig file
 file ".editorconfig", <<~CODE
@@ -69,4 +76,11 @@ CODE
 # 8. Execute rspec:install
 after_bundle do
   generate "rspec:install"
+
+  inside('spec') do
+    line = '# Rails.root.glob("spec/support/**/*.rb").sort.each { |f| require f }'
+    gsub_file 'rails_helper.rb', line, line.sub('# ', '')
+    line = "# Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }"
+    gsub_file 'rails_helper.rb', line, line.sub('# ', '')
+  end
 end
