@@ -1,3 +1,5 @@
+#!/bin/sh
+
 --skip-action-mailbox
 --skip-action-mailer
 --skip-action-text
@@ -6,5 +8,9 @@
 --skip-jbuilder
 --skip-system-test
 --skip-test
+
+# Rails 7.2
+--skip-rubocop
+--skip-ci
 
 --template https://raw.githubusercontent.com/nzwsch/rails-templates/master/template.rb

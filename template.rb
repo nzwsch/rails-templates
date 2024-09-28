@@ -20,15 +20,13 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 CODE
 
-# 2. Add rubocop-rails-omakase gem and rubocop-rspec gem to Gemfile
-gem_group :development do
-  gem "rubocop-rails-omakase", require: false
-  gem "rubocop-rspec", require: false
-end
-
-# Remove .rubocop.yml file if it exists
-if File.exist?(".rubocop.yml")
-  run "rm .rubocop.yml"
+# 2. Remove unnecessary files
+[
+  ".rubocop.yml",
+  "public/apple-touch-icon-precomposed.png",
+  "vendor/.keep",
+].each do |file|
+  run "rm #{file}" if File.exist?(file)
 end
 
 # 3. Add .rubocop.yml file
@@ -45,7 +43,16 @@ Style/PercentLiteralDelimiters:
     "%w": "()"
 CODE
 
-# 4. Add rspec-rails gem to Gemfile
+# 4. Add Procfile
+file "Procfile", <<~CODE
+web: ./bin/rails s
+CODE
+
+# 5. Update environment files
+environment "config.generators.view_specs = false"
+environment "config.assume_ssl = true", env: "production"
+
+# 6. Add test gems to Gemfile
 gem_group :development, :test do
   gem "rspec-rails", "~> 6.1"
   gem "factory_bot_rails", "~> 6.4"
@@ -53,17 +60,24 @@ gem_group :development, :test do
   gem "webmock", "~> 3.23"
 end
 
-# 5. Make directory for spec/support
+# 7. Add rubocop-rails-omakase gem and rubocop-rspec gem to Gemfile
+gem_group :development do
+  gem "rubocop-rails-omakase", require: false
+  gem "rubocop-rspec", require: false
+  gem "brakeman", require: false
+end
+
+# 8. Make directory for spec/support
 run "mkdir -p spec/support"
 
-# 6. Add spec/support/factory_bot.rb file
+# 9. Add spec/support/factory_bot.rb file
 file "spec/support/factory_bot.rb", <<~CODE
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
 CODE
 
-# 7. Add spec/support/shoulda_matchers.rb file
+# 10. Add spec/support/shoulda_matchers.rb file
 file "spec/support/shoulda_matchers.rb", <<~CODE
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -73,14 +87,19 @@ Shoulda::Matchers.configure do |config|
 end
 CODE
 
-# 8. Execute rspec:install
+# 11. Execute rspec:install
 after_bundle do
   generate "rspec:install"
 
-  inside('spec') do
+  inside("spec") do
     line = '# Rails.root.glob("spec/support/**/*.rb").sort.each { |f| require f }'
-    gsub_file 'rails_helper.rb', line, line.sub('# ', '')
+    gsub_file "rails_helper.rb", line, line.sub("# ", "")
+
     line = "# Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }"
-    gsub_file 'rails_helper.rb', line, line.sub('# ', '')
+    gsub_file "rails_helper.rb", line, line.sub("# ", "")
+
+    insert_into_file "rails_helper.rb", after: "require 'rspec/rails'\n" do
+      "require 'webmock/rspec'\n"
+    end
   end
 end
