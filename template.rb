@@ -43,16 +43,21 @@ Style/PercentLiteralDelimiters:
     "%w": "()"
 CODE
 
-# 4. Add Procfile
+# 4. Add .rufo file
+file ".rufo", <<~CODE
+excludes [db/schema.rb]
+CODE
+
+# 5. Add Procfile
 file "Procfile", <<~CODE
 web: ./bin/rails s
 CODE
 
-# 5. Update environment files
+# 6. Update environment files
 environment "config.generators.view_specs = false"
 environment "config.assume_ssl = true", env: "production"
 
-# 6. Add test gems to Gemfile
+# 7. Add test gems to Gemfile
 gem_group :development, :test do
   gem "rspec-rails", "~> 6.1"
   gem "factory_bot_rails", "~> 6.4"
@@ -60,24 +65,24 @@ gem_group :development, :test do
   gem "webmock", "~> 3.23"
 end
 
-# 7. Add rubocop-rails-omakase gem and rubocop-rspec gem to Gemfile
+# 8. Add rubocop-rails-omakase gem and rubocop-rspec gem to Gemfile
 gem_group :development do
   gem "rubocop-rails-omakase", require: false
   gem "rubocop-rspec", require: false
   gem "brakeman", require: false
 end
 
-# 8. Make directory for spec/support
+# 9. Make directory for spec/support
 run "mkdir -p spec/support"
 
-# 9. Add spec/support/factory_bot.rb file
+# 10. Add spec/support/factory_bot.rb file
 file "spec/support/factory_bot.rb", <<~CODE
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
 CODE
 
-# 10. Add spec/support/shoulda_matchers.rb file
+# 11. Add spec/support/shoulda_matchers.rb file
 file "spec/support/shoulda_matchers.rb", <<~CODE
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -87,7 +92,7 @@ Shoulda::Matchers.configure do |config|
 end
 CODE
 
-# 11. Execute rspec:install
+# 12. Execute rspec:install
 after_bundle do
   generate "rspec:install"
 
