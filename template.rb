@@ -68,7 +68,7 @@ end
 # 8. Add rubocop-rails-omakase gem and rubocop-rspec gem to Gemfile
 gem_group :development do
   gem "rubocop-rails-omakase", "~> 1.0.0", require: false
-  gem "rubocop-rspec", "~> 3.0.4" require: false
+  gem "rubocop-rspec", "~> 3.0.4", require: false
   gem "brakeman", require: false
 end
 
