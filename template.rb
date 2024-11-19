@@ -56,6 +56,7 @@ CODE
 # 6. Update environment files
 environment "config.generators.view_specs = false"
 environment "config.assume_ssl = true", env: "production"
+environment "config.active_job.queue_adapter = :test", env: "test"
 
 # 7. Add test gems to Gemfile
 gem_group :development, :test do
